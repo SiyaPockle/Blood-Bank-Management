@@ -1,5 +1,5 @@
 <?php
-include 'db_config.php'
+include 'db_config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,32 +12,32 @@ include 'db_config.php'
 <body>
 <img class="bg" src="images\bb1.jpg">
 <h1>Donation History</h1>
-    <table border="2" >
-            <th>Donor id</th>
-            <th>Donor Name</th>
-            <th>Age</th>
-            <th>Address</th>
-            <th>Blood Group</th>
-            <th>Quantity</th>
-
-        <tr>
-           <?php
-            $q="SELECT `history`.donor_id , `dname`,`dage`, `daddress`, `dbgrp`, `qty` FROM history JOIN donor_details ON history.donor_id=donor_details.id";
-            $result=mysqli_query($conn,$q);
-            while($row=mysqli_fetch_assoc($result))
-            {
-                ?>
-            <td> <?php echo $row['donor_id']; ?> </td>
-            <td> <?php echo $row['dname']; ?> </td>
-            <td> <?php echo $row['dage']; ?> </td>
-            <td> <?php echo $row['daddress']; ?> </td>
-            <td> <?php echo $row['dbgrp']; ?> </td>
-            <td> <?php echo $row['qty']; ?> </td>
-            </tr>
-            <?php
-            }
-            ?>
-    
-    </table>
+<div>
+    <form action="searchhistory.php" method="POST">
+        <input type='text' class="form-control" id="history" name="bgrp" autocomplete="off" placeholder="Search...">
+        <button type='submit'>Search</button>
+    </form>
+</div>
+<div id="searchresult"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#history").keyup(function(){
+        var input = $(this).val();
+        if (input != ""){
+            $.ajax({
+                url:"searchhistory.php",
+                method:"POST",
+                data:{bgrp:input},
+                success:function(data){
+                    $("#searchresult").html(data);
+                }
+            });
+         } else{
+            $("#searchresult").css("display","none");
+        }
+    });
+});
+</script>
 </body>
 </html>
